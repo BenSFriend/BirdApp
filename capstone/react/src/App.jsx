@@ -9,6 +9,7 @@ import RegisterView from './views/RegisterView/RegisterView';
 import UserProfileView from './views/UserProfileView/UserProfileView';
 import MainNav from './components/MainNav/MainNav';
 import ProtectedRoute from './components/ProtectedRoute';
+import styles from './App.module.css';
 
 import axios from 'axios';
 
@@ -58,7 +59,7 @@ export default function App() {
       <div id="app">
         <UserContext.Provider value={user}>
           <MainNav />
-          <main id="main-content">
+          <main id="main-content" className={styles.mainContent}> 
             <Routes>
               <Route path="/" element={<HomeView />} />
               <Route path="/login" element={<LoginView onLogin={handleLogin} />} />
