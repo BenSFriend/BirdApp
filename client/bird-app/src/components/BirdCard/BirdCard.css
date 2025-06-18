@@ -1,0 +1,59 @@
+.bird-card-container {
+    position: absolute;
+    cursor: pointer;
+    transition: all 0.2s ease-out;
+  }
+  
+  .bird-card {
+    background-color: transparent;
+    border-radius: 0.5rem;
+    border: transparent;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  
+  .bird-image {
+    width: 3rem;
+    height: 3rem;
+  }
+  
+  .bird-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .bird-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 0.3rem;
+    padding: 0.5rem;
+    background-color: #f3cee9;
+    color: white;
+    font-size: 0.6rem;
+    border-radius: 0rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+    z-index: 20;
+  }
+  
+  .bird-name {
+    font-weight: 300;
+  }
+  
+  .bird-species {
+    font-size: 0.75rem;
+    font-style: italic;
+  }
+  
+  .tooltip-arrow {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 2px solid transparent;
+    border-top-color: #f5c7e4;
+  }
