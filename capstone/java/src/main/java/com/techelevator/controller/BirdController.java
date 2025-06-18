@@ -106,9 +106,7 @@ public class BirdController {
             if (bird.getRange_id() <= 0) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Range ID is required.");
             }
-            if (bird.getId() <= 0) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bird ID is required.");
-            }
+
 
             newBird = birdDao.createBird(bird);
             if (newBird == null) {

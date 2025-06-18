@@ -1,0 +1,12 @@
+.wholePage{
+    border-radius: 10px;
+    background-color: rgb(35, 65, 34);
+    margin-top: 8;
+}
+
+.cardContainer{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
