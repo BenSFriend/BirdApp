@@ -29,7 +29,7 @@
 
 /* Make other cards shrink when any card is hovered */
 .cardContainer:not(:hover) {
-    transition: all 0.3s ease;
+    transition: all 0.5s ease;
 }
 
 .cardContainer:hover~.cardContainer {
@@ -67,9 +67,9 @@
 }
 
 /*  gotta fix this to act right, looking for smaller text and description undearneath*/
-.infoSubContainer{
-display: flex;
-flex-direction: row;
+.infoSubContainer {
+    display: flex;
+    flex-direction: row;
 }
 
 
@@ -212,9 +212,8 @@ flex-direction: row;
     .wingspan,
     .range,
     .diet {
-        font-size: 0.85rem;
-        margin-bottom: 0.3rem;
-        padding: 0.25rem 0.4rem;
+        font-size: 0.7rem;
+
     }
 
     .cardContainer:hover {

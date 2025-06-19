@@ -33,7 +33,7 @@ public class JdbcBirdDao implements BirdDao {
 
         final String sql =
 
-                "SELECT bird_id, bird_name, wingspan, r.bird_range AS bird_range, d.bird_diet AS bird_diet, img_url\n" +
+                "SELECT bird_id, bird_name, bird_description, wingspan, r.bird_range AS bird_range, d.bird_diet AS bird_diet, img_url\n" +
                         "FROM birds\n" +
                         "JOIN ranges r ON birds.range_id = r.range_id\n" +
                         "JOIN diets d ON birds.diet_id = d.diet_id;";
@@ -63,7 +63,7 @@ public class JdbcBirdDao implements BirdDao {
 
         final String sql =
 
-                "SELECT bird_id, bird_name, wingspan, r.bird_range, d.bird_diet, img_url\n" +
+                "SELECT bird_id, bird_name, bird_description, wingspan, r.bird_range, d.bird_diet, img_url\n" +
                         "FROM birds\n" +
                         "JOIN ranges r ON birds.range_id  = r.range_id\n" +
                         "JOIN diets d ON birds.diet_id = d.diet_id\n" +
@@ -88,7 +88,7 @@ public class JdbcBirdDao implements BirdDao {
 
         final String sql =
 
-                "SELECT bird_id, bird_name, wingspan, r.bird_range, d.bird_diet, img_url\n" +
+                "SELECT bird_id, bird_name, bird_description, wingspan, r.bird_range, d.bird_diet, img_url\n" +
                         "FROM birds\n" +
                         "JOIN ranges r ON birds.range_id  = r.range_id\n" +
                         "JOIN diets d ON birds.diet_id = d.diet_id\n" +
@@ -113,7 +113,7 @@ public class JdbcBirdDao implements BirdDao {
 
         final String sql =
 
-                "SELECT bird_id, bird_name, wingspan, r.bird_range, d.bird_diet, img_url\n" +
+                "SELECT bird_id, bird_name, bird_description, wingspan, r.bird_range, d.bird_diet, img_url\n" +
                         "FROM birds\n" +
                         "JOIN ranges r ON birds.range_id  = r.range_id\n" +
                         "JOIN diets d ON birds.diet_id = d.diet_id\n" +
@@ -137,7 +137,7 @@ public class JdbcBirdDao implements BirdDao {
         Bird bird = null;
         String sql =
 
-                "SELECT bird_id, bird_name, wingspan, r.bird_range, d.bird_diet, img_url\n" +
+                "SELECT bird_id, bird_name, bird_description, wingspan, r.bird_range, d.bird_diet, img_url\n" +
                         "FROM birds\n" +
                         "JOIN ranges r ON birds.range_id  = r.range_id\n" +
                         "JOIN diets d ON birds.diet_id = d.diet_id\n" +
@@ -186,11 +186,12 @@ public class JdbcBirdDao implements BirdDao {
 
     @Override
     public Bird createBird(Bird bird) {
-        String sql = "INSERT INTO birds(bird_name, wingspan, range_id, diet_id, img_url)\n" +
-                "VALUES (?, ?, ?, ?, ?) RETURNING bird_id;";
+        String sql = "INSERT INTO birds(bird_name, bird_description, wingspan, range_id, diet_id, img_url)\n" +
+                "VALUES (?, ?, ?, ?, ?, ?) RETURNING bird_id;";
         try {
             int newBird = jdbcTemplate.queryForObject(sql, int.class,
                     bird.getBird_name(),
+                    bird.getBird_description(),
                     bird.getWingspan(),
                     bird.getRange_id(),
                     bird.getDiet_id(),
@@ -211,11 +212,12 @@ public class JdbcBirdDao implements BirdDao {
     private Bird mapRowToBirdWithDetails(SqlRowSet rs) {
         Bird bird = new Bird();
         bird.setId(rs.getInt("bird_id"));
+        bird.setBird_description(rs.getString("bird_description"));
         bird.setBird_name(rs.getString("bird_name"));
         bird.setWingspan(rs.getInt("wingspan"));
         bird.setImg_url(rs.getString("img_url"));
-        bird.setRange(rs.getString("bird_range"));
-        bird.setDiet(rs.getString("bird_diet"));     // requires Bird class to have `diet` (String)
+        bird.setBird_range(rs.getString("bird_range"));
+        bird.setBird_diet(rs.getString("bird_diet"));     // requires Bird class to have `diet` (String)
         return bird;
     }
 
@@ -223,6 +225,7 @@ public class JdbcBirdDao implements BirdDao {
         Bird bird = new Bird();
         bird.setId(rs.getInt("bird_id"));
         bird.setBird_name(rs.getString("bird_name"));
+        bird.setBird_description(rs.getString("bird_description"));
         bird.setDiet_id(rs.getInt("diet_id"));
         bird.setRange_id(rs.getInt("range_id"));
         bird.setImg_url(rs.getString("img_url"));

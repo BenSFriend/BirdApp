@@ -16,10 +16,10 @@ export default function BirdCard({ bird }) {
             <div className={styles.infoContainer}>
                 <div className={styles.infoSubContainer}>
                     <h1 className={styles.wingspan}> Wingspan- {bird.wingspan}</h1>
-                    <h1 className={styles.range}> Native Range- {bird.range}</h1>
-                    <h1 className={styles.diet}> Diet- {bird.diet}</h1>
+                    <h1 className={styles.range}> Native Range- {bird.bird_range}</h1>
+                    <h1 className={styles.diet}> Diet- {bird.bird_diet}</h1>
                 </div>
-                <p className={styles.birdDescription}>{bird.bird_description} bird description here, need to add to database</p>
+                <p className={styles.birdDescription}>{bird.bird_description}</p>
             </div>
         </div>
     );

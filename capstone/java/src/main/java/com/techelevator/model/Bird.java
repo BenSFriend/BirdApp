@@ -10,6 +10,7 @@ public class Bird {
     private int range_id;
     private int diet_id;
     private String img_url;
+    private String bird_description;
 
     //joining data
     private String bird_range;
@@ -18,9 +19,10 @@ public class Bird {
     public Bird() {
     }
 
-    public Bird(int id, String bird_name, int wingspan,
+    public Bird(int id, String bird_name, String bird_description, int wingspan,
                 int range_id, int diet_id, String img_url) {
         this.id = id;
+        this.bird_description = bird_description;
         this.bird_name = bird_name;
         this.wingspan = wingspan;
         this.range_id = range_id;
@@ -32,7 +34,8 @@ public class Bird {
 
 
     // includes range and diet strings
-    public Bird(int id, String bird_name, int wingspan, String bird_range, int range_id, String bird_diet, int diet_id, String img_url) {
+    public Bird(int id, String bird_name, String bird_description, int wingspan, String bird_range, int range_id, String bird_diet, int diet_id, String img_url) {
+        this.bird_description = bird_description;
         this.id = id;
         this.bird_name = bird_name;
         this.wingspan = wingspan;
@@ -43,6 +46,30 @@ public class Bird {
         this.diet_id = diet_id;
     }
 
+
+    public String getBird_range() {
+        return bird_range;
+    }
+
+    public void setBird_range(String bird_range) {
+        this.bird_range = bird_range;
+    }
+
+    public String getBird_diet() {
+        return bird_diet;
+    }
+
+    public void setBird_diet(String bird_diet) {
+        this.bird_diet = bird_diet;
+    }
+
+    public String getBird_description() {
+        return bird_description;
+    }
+
+    public void setBird_description(String bird_description) {
+        this.bird_description = bird_description;
+    }
 
     public int getId() {
         return id;
@@ -92,19 +119,5 @@ public class Bird {
         this.img_url = img_url;
     }
 
-    public String getRange() {
-        return bird_range;
-    }
 
-    public void setRange(String range) {
-        this.bird_range = range;
-    }
-
-    public String getDiet() {
-        return bird_diet;
-    }
-
-    public void setDiet(String diet) {
-        this.bird_diet = diet;
-    }
 }
