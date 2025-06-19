@@ -1,14 +1,14 @@
 import React from 'react';
 import './BirdCard.css';
 
-const BirdCard = ({ 
-  bird, 
-  scale, 
-  position, 
-  isHovered, 
-  onMouseEnter, 
-  onMouseLeave, 
-  onClick 
+const BirdCard = ({
+  bird,
+  scale,
+  position,
+  isHovered,
+  onMouseEnter,
+  onMouseLeave,
+  onClick
 }) => {
   return (
     <div
@@ -30,7 +30,7 @@ const BirdCard = ({
             alt={bird.name}
           />
         </div>
-        
+
         {isHovered && (
           <div className="bird-tooltip">
             <div className="bird-name">{bird.name}</div>
