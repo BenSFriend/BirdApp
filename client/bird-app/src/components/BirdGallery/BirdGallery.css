@@ -7,8 +7,15 @@
   
   .birds-container {
     position: relative;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .bird-card-container {
+    position: absolute;
+    /* Remove any transform-origin that might be causing issues */
+    transform-origin: center center;
   }
   
   .loading-indicator {

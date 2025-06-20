@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { loadBirdsFromApi } from '../services/birdApi';
 import { useGrid } from './useGrids';
 
-
 export const useBirds = (containerWidth = 1200, containerHeight = 800) => {
   const [birds, setBirds] = useState([]);
   const [filteredBirds, setFilteredBirds] = useState([]);
@@ -12,7 +11,7 @@ export const useBirds = (containerWidth = 1200, containerHeight = 800) => {
   const [retryCount, setRetryCount] = useState(0);
 
   // Use the grid hook for all grid-related functionality
-  const { generateRandomPosition } = useGrid();
+  const { generateRandomPosition, clearOccupiedPositions } = useGrid();
 
   const MAX_RETRIES = 3;
   const RETRY_DELAY = 1000; // 1 second
@@ -26,6 +25,8 @@ export const useBirds = (containerWidth = 1200, containerHeight = 800) => {
     if (!isRetry) {
       setError(null);
       setRetryCount(0);
+      // Clear occupied positions when loading new birds
+      clearOccupiedPositions();
     }
 
     setLoading(true);
@@ -57,9 +58,11 @@ export const useBirds = (containerWidth = 1200, containerHeight = 800) => {
           // Use the grid hook's position generation
           const gridPosition = generateRandomPosition(containerWidth, containerHeight);
           
+          console.log(`Bird ${index} (${bird.name}) positioned at:`, gridPosition); // Debug log
+          
           return {
             ...bird,
-            id: birds.length + index + 1,
+            id: bird.id || `bird-${Date.now()}-${index}`, // Ensure unique ID
             gridPosition,
             // Ensure required fields have fallback values
             name: bird.name || `Unknown Bird ${index + 1}`,
@@ -70,7 +73,7 @@ export const useBirds = (containerWidth = 1200, containerHeight = 800) => {
           // Return bird with default position if position generation fails
           return {
             ...bird,
-            id: birds.length + index + 1,
+            id: bird.id || `bird-${Date.now()}-${index}`,
             gridPosition: { col: 0, row: 0, x: 0, y: 0 }, // Default position with all required fields
             name: bird.name || `Unknown Bird ${index + 1}`,
             species: bird.species || 'Unknown Species'
@@ -78,8 +81,9 @@ export const useBirds = (containerWidth = 1200, containerHeight = 800) => {
         }
       });
       
-      setBirds(prev => [...prev, ...birdsWithPositions]);
-      setFilteredBirds(prev => [...prev, ...birdsWithPositions]);
+      // Replace birds instead of appending (this was causing duplicates)
+      setBirds(birdsWithPositions);
+      setFilteredBirds(birdsWithPositions);
       
       // Reset retry count on success
       setRetryCount(0);
@@ -127,7 +131,7 @@ export const useBirds = (containerWidth = 1200, containerHeight = 800) => {
     } finally {
       setLoading(false);
     }
-  }, [retryCount, birds.length, generateRandomPosition, containerWidth, containerHeight]);
+  }, [retryCount, generateRandomPosition, containerWidth, containerHeight, clearOccupiedPositions]);
 
   // Search functionality with error handling
   useEffect(() => {
@@ -185,6 +189,6 @@ export const useBirds = (containerWidth = 1200, containerHeight = 800) => {
     retryCount,
     maxRetries: MAX_RETRIES
   };
-}; // ← This closing brace was missing
+};
 
 export default { useBirds };

@@ -1,31 +1,70 @@
-import { useState } from 'react';
+import { useState, useCallback, useRef } from 'react';
 
 const useGrid = () => {
   const [hoveredBird, setHoveredBird] = useState(null);
   const [selectedBird, setSelectedBird] = useState(null);
-  const [occupiedPositions, setOccupiedPositions] = useState(new Set());
   const [gridSize] = useState({ cols: 12, rows: 8 });
+  
+  // Use useRef to maintain occupied positions across renders
+  const occupiedPositions = useRef(new Set());
 
-  const generateRandomPosition = (containerWidth, containerHeight) => {
+  const generateRandomPosition = useCallback((containerWidth, containerHeight) => {
+    console.log('Generating position for container:', containerWidth, 'x', containerHeight);
+    console.log('Current occupied positions:', Array.from(occupiedPositions.current));
+    
     let attempts = 0;
     while (attempts < 100) {
       const col = Math.floor(Math.random() * gridSize.cols);
       const row = Math.floor(Math.random() * gridSize.rows);
       const posKey = `${col}-${row}`;
       
-      if (!occupiedPositions.has(posKey)) {
-        setOccupiedPositions(prev => new Set([...prev, posKey]));
+      if (!occupiedPositions.current.has(posKey)) {
+        occupiedPositions.current.add(posKey);
         
-        const x = (col / (gridSize.cols - 1)) * (containerWidth - 100);
-        const y = (row / (gridSize.rows - 1)) * (containerHeight - 100);
+        // Calculate positions to spread across the full container
+        const padding = 100;
+        const cellWidth = (containerWidth - padding * 2) / gridSize.cols;
+        const cellHeight = (containerHeight - padding * 2) / gridSize.rows;
+        
+        const x = padding + (col * cellWidth) + (cellWidth / 2);
+        const y = padding + (row * cellHeight) + (cellHeight / 2);
+        
+        console.log(`Generated position: col=${col}, row=${row}, x=${x}, y=${y}`);
         
         return { col, row, x, y };
       }
       attempts++;
     }
     
-    return { col: 0, row: 0, x: 0, y: 0 };
-  };
+    // Fallback: find first available position
+    console.log('Max attempts reached, finding first available position');
+    for (let row = 0; row < gridSize.rows; row++) {
+      for (let col = 0; col < gridSize.cols; col++) {
+        const posKey = `${col}-${row}`;
+        if (!occupiedPositions.current.has(posKey)) {
+          occupiedPositions.current.add(posKey);
+          
+          const padding = 100;
+          const cellWidth = (containerWidth - padding * 2) / gridSize.cols;
+          const cellHeight = (containerHeight - padding * 2) / gridSize.rows;
+          
+          const x = padding + (col * cellWidth) + (cellWidth / 2);
+          const y = padding + (row * cellHeight) + (cellHeight / 2);
+          
+          console.log(`Fallback position: col=${col}, row=${row}, x=${x}, y=${y}`);
+          return { col, row, x, y };
+        }
+      }
+    }
+    
+    console.log('All positions occupied, using default');
+    return { col: 0, row: 0, x: 150, y: 150 };
+  }, [gridSize.cols, gridSize.rows]);
+
+  const clearOccupiedPositions = useCallback(() => {
+    console.log('Clearing occupied positions');
+    occupiedPositions.current.clear();
+  }, []);
 
   return {
     hoveredBird,
@@ -33,9 +72,8 @@ const useGrid = () => {
     selectedBird,
     setSelectedBird,
     gridSize,
-    occupiedPositions,
-    setOccupiedPositions,
-    generateRandomPosition
+    generateRandomPosition,
+    clearOccupiedPositions
   };
 };
 

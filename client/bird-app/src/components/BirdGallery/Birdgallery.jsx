@@ -62,6 +62,16 @@ const BirdGallery = () => {
       />
     );
   }
+  const getScale = (birdId, gridPosition, hoveredBird) => {
+    // Return default scale if no bird is hovered
+    if (!hoveredBird) return 1;
+    
+    // Scale up the hovered bird
+    if (hoveredBird.id === birdId) return 1.1;
+    
+    // Scale down other birds slightly when one is hovered
+    return 0.95;
+  };
 
   return (
     <div className="bird-gallery">
@@ -74,28 +84,35 @@ const BirdGallery = () => {
 
       <GridBackground />
 
-      <div className="birds-container">
-        {filteredBirds.map((bird) => {
-          const scale = getScale(bird.id, bird.gridPosition, hoveredBird);
-          
-          // Use the calculated x, y positions from the grid hook
-          const left = bird.gridPosition.x;
-          const top = bird.gridPosition.y;
-          
-          return (
-            <BirdCard
-              key={bird.id}
-              bird={bird}
-              scale={scale}
-              position={{ left, top }}
-              isHovered={hoveredBird?.id === bird.id}
-              onMouseEnter={() => setHoveredBird({ id: bird.id, position: bird.gridPosition })}
-              onMouseLeave={() => setHoveredBird(null)}
-              onClick={() => handleBirdClick(bird)}
-            />
-          );
-        })}
-      </div>
+    <div className="birds-container">
+    {filteredBirds.map((bird) => {
+   console.log('Container size:', containerSize);
+   console.log('Filtered birds count:', filteredBirds.length);
+   console.log('Bird positions:', filteredBirds.map(bird => ({
+     id: bird.id,
+     name: bird.name,
+     col: bird.gridPosition.col,
+     row: bird.gridPosition.row,
+     x: bird.gridPosition.x,
+     y: bird.gridPosition.y
+   })));
+
+    const scale = getScale(bird.id, bird.gridPosition, hoveredBird);
+  
+      return (
+        <BirdCard
+        key={bird.id}
+        bird={bird}
+        scale={scale}
+        // Remove the position prop - let BirdCard use bird.gridPosition directly
+        isHovered={hoveredBird?.id === bird.id}
+        onMouseEnter={() => setHoveredBird({ id: bird.id, position: bird.gridPosition })}
+        onMouseLeave={() => setHoveredBird(null)}
+        onClick={() => handleBirdClick(bird)}
+      />
+    );
+  })}
+    </div>
 
       {loading && (
         <div className="loading-indicator">
