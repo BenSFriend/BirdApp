@@ -6,7 +6,7 @@
 
 /*  ultimately, bird image and name should diaplay, and a popup should appear on hover like michaelas. onclick should bring up a popup*/
 .cardContainer {
-    background-color: rgb(212, 212, 212);
+    background-color: rgb(236, 235, 235);
     min-width: 40px;
     max-width: 60px;
     height: auto;
@@ -30,21 +30,6 @@
 
 /* this will be better using 'distance from pointer' as my metric, and can pull off a magnification radial effect*/
 /* Make other cards shrink when any card is hovered */
-.cardContainer:not(:hover) {
-    transition: all 0.5s ease;
-}
-
-.cardContainer:hover~.cardContainer {
-    transform: scale(0.90) translateY(1px);
-    opacity: 0.8;
-}
-
-@supports selector(:has(*)) {
-    .cardContainer:has(~ .cardContainer:hover) {
-        transform: scale(0.90) translateY(1px);
-        opacity: 0.8;
-    }
-}
 
 .birdImage {
     width: 100%;
