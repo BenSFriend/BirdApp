@@ -63,3 +63,39 @@
     font-size: 1.125rem;
   }
   
+  /* Add these new styles to your existing BirdGallery.css */
+  .view-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+  }
+
+  .toggle-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+  }
+
+  .toggle-button:hover {
+  background-color: #2563eb;
+  }
+
+  .card-grid-container {
+  padding: 100px 20px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  }
