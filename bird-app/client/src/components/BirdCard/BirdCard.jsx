@@ -1,20 +1,23 @@
 import React from 'react';
 import './BirdCard.css';
 
-const BirdCard = ({ 
-  bird, 
-  scale = 1, 
+const BirdCard = ({
+  bird,
+  scale = 1,
   position, // Keep position prop for backward compatibility
-  isHovered, 
-  onMouseEnter, 
-  onMouseLeave, 
-  onClick 
+  isHovered,
+  onMouseEnter,
+  onMouseLeave,
+  onClick
 }) => {
   // Use position prop if provided, otherwise fall back to bird.gridPosition
-  const { x, y } = position ? 
-    { x: position.left, y: position.top } : 
+  const { x, y } = position ?
+    { x: position.left, y: position.top } :
     (bird.gridPosition || { x: 0, y: 0 });
-  
+
+
+    console.log('Image URL:', bird.bird_description);
+
   return (
     <div
       className="bird-card-container"
@@ -32,15 +35,14 @@ const BirdCard = ({
       <div className="bird-card">
         <div className="bird-image">
           <img
-            src={bird.image}
-            alt={bird.name}
-          />
+            src={bird.img_url} alt={bird.bird_name} />
         </div>
-        
+
         {isHovered && (
           <div className="bird-tooltip">
-            <div className="bird-name">{bird.name}</div>
-            <div className="bird-species">{bird.species}</div>
+            <div className="bird-name">{bird.bird_name}</div>
+            <div className="bird-range">{bird.range}</div>
+            <div className="bird-diet">{bird.diet}</div>
             <div className="tooltip-arrow"></div>
           </div>
         )}

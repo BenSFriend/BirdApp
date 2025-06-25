@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { loadBirdsFromApi } from '../services/birdApi';
+import { loadBirdsFromApi } from '../services/birdAPI';
 import { useGrid } from './useGrids';
 
 export const useBirds = (containerWidth = 1200, containerHeight = 800) => {

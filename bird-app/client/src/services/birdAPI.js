@@ -1,4 +1,14 @@
-// Mock data - replace with actual API calls
+import axios from 'axios';
+
+// Base URL for the bird API - pointing to Spring Boot backend on port 9000
+const API_BASE = 'http://localhost:9000';
+const BASE_URL = `${API_BASE}/birds`;
+
+// Configure axios defaults
+axios.defaults.headers.common['Content-Type'] = 'application/json';
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+
+// Mock data - fallback for development
 const mockBirds = [
     { id: 1, name: 'Blue Jay', species: 'Cyanocitta cristata', image: 'https://as2.ftcdn.net/v2/jpg/06/79/26/25/1000_F_679262593_ay1fXp7QMwI6pq0ZMEuPYDAJDMLSmwIN.webp', habitat: 'Forests', diet: 'Omnivore' },
     { id: 2, name: 'American Robin', species: 'Turdus migratorius', image: 'https://as1.ftcdn.net/v2/jpg/06/27/16/58/1000_F_627165882_fjRbSSdBbTnjzQNN2YbvfsUzW63rYzMX.webp', habitat: 'Gardens', diet: 'Omnivore' },
@@ -7,28 +17,7 @@ const mockBirds = [
     { id: 5, name: 'Peregrine Falcon', species: 'Falco peregrinus', image: 'https://as1.ftcdn.net/v2/jpg/13/26/26/60/1000_F_1326266041_ZtgYIdZR1g1XeSsUxLTwfkasMwQND7lw.webp', habitat: 'Cliffs and tall buildings', diet: 'Carnivore' },
     { id: 6, name: 'Bald Eagle', species: 'Haliaeetus leucocephalus', image: 'https://as2.ftcdn.net/v2/jpg/10/93/63/21/1000_F_1093632177_e2xZWbocy0FYl8vtqK7S9Tw82VKD5HDj.webp', habitat: 'Near large bodies of open water', diet: 'Carnivore' },
     // ... rest of bird data
-  ];
-  
-  export const loadBirdsFromApi = async () => {
-    // Replace this with actual API call
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(mockBirds);
-      }, 500);
-    });
-  
-    // When ready to use real API:
-    // const response = await fetch('/api/birds');
-    // return await response.json();
-  };
-
-import axios from 'axios';
-
-// Base URL for the bird API
-const BASE_URL = '/birds';
-
-// Configure axios defaults
-axios.defaults.headers.common['Content-Type'] = 'application/json';
+];
 
 // Error handler utility
 const handleError = (error) => {
@@ -45,15 +34,69 @@ const handleError = (error) => {
     }
 };
 
+// Legacy function for backward compatibility - now uses real API with fallback
+export const loadBirdsFromApi = async () => {
+    try {
+        console.log(`Attempting to fetch from: ${BASE_URL}/all`);
+        
+        // Try to use real API first
+        const response = await axios.get(`${BASE_URL}/all`);
+        
+        // Check if we got HTML instead of JSON (wrong endpoint)
+        if (typeof response.data === 'string' && response.data.includes('<!doctype html>')) {
+            throw new Error('Backend API returned HTML - check if endpoint exists');
+        }
+        
+        console.log('API Response received:', response.data);
+        
+        let birds;
+        
+        // Handle different response formats
+        if (Array.isArray(response.data)) {
+            birds = response.data;
+        } else if (response.data.birds && Array.isArray(response.data.birds)) {
+            birds = response.data.birds;
+        } else if (response.data.data && Array.isArray(response.data.data)) {
+            birds = response.data.data;
+        } else if (response.data.content && Array.isArray(response.data.content)) {
+            // Spring Boot PageImpl format
+            birds = response.data.content;
+        } else {
+            console.warn('API returned unexpected format:', response.data);
+            throw new Error('Invalid response format: expected an array of birds');
+        }
+        
+        console.log(`Successfully loaded ${birds.length} birds from API`);
+        return birds;
+        
+    } catch (error) {
+        console.error('API call failed:', error.message);
+        console.log('Falling back to mock data...');
+        
+        // Fallback to mock data if API fails
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                console.log(`Using ${mockBirds.length} mock birds`);
+                resolve(mockBirds);
+            }, 500);
+        });
+    }
+};
+
+// Main API service object
 const BirdService = {
 
     /**
-     * Get all birds
+     * Get all birds - updated for port 9000
      * @returns {Promise} Promise resolving to array of birds
      */
     getAllBirds() {
+        console.log(`Fetching all birds from: ${BASE_URL}/all`);
         return axios.get(`${BASE_URL}/all`)
-            .then(response => response.data)
+            .then(response => {
+                console.log('getAllBirds response:', response.data);
+                return response.data;
+            })
             .catch(handleError);
     },
 
@@ -184,8 +227,6 @@ const BirdService = {
             .catch(handleError);
     },
 
-
-
     /**
      * Validate bird data before submission
      * @param {Object} bird - Bird object to validate
@@ -221,4 +262,5 @@ const BirdService = {
     }
 };
 
+// Export both the legacy function and the new API object
 export default BirdService;

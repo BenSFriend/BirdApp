@@ -9,37 +9,42 @@ const BirdDetail = ({ bird, onClose }) => {
         <X size={16} />
         Back to Grid
       </button>
-      
+
       <div className="bird-detail-content">
         <div className="bird-detail-grid">
           <div className="bird-image-section">
             <img
-              src={bird.image.replace('80', '400')}
+              src={bird.img_url}
               alt={bird.name}
               className="bird-detail-image"
             />
           </div>
           <div className="bird-info-section">
-            <h1 className="bird-title">{bird.name}</h1>
-            <p className="bird-scientific-name">{bird.species}</p>
-            
+            <h1 className="bird-title">{bird.bird_name}</h1>
+
             <div className="bird-details">
               <div className="detail-item">
-                <h3>Habitat</h3>
-                <p>{bird.habitat}</p>
+                <h3>Wingspan</h3>
+                <p>{bird.wingspan} cm</p>
               </div>
-              
+            </div>
+
+            <div className="bird-details">
+              <div className="detail-item">
+                <h3>Range</h3>
+                <p>{bird.range}</p>
+              </div>
+
               <div className="detail-item">
                 <h3>Diet</h3>
                 <p>{bird.diet}</p>
               </div>
-              
-              <div className="detail-description">
-                <p>
-                  This beautiful bird is known for its distinctive appearance and behavior. 
-                  Click the back button to return to the grid and explore more birds.
-                </p>
+
+              <div className="detail-item">
+                <h3>Description</h3>
+                <p>{bird.bird_description}</p>
               </div>
+
             </div>
           </div>
         </div>

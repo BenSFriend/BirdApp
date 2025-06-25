@@ -22,7 +22,7 @@ const BirdGallery = () => {
         height: window.innerHeight
       });
     };
-    
+
     updateSize();
     window.addEventListener('resize', updateSize);
     return () => window.removeEventListener('resize', updateSize);
@@ -59,9 +59,9 @@ const BirdGallery = () => {
 
   if (selectedBird) {
     return (
-      <BirdDetail 
-        bird={selectedBird} 
-        onClose={closeBirdDetail} 
+      <BirdDetail
+        bird={selectedBird}
+        onClose={closeBirdDetail}
       />
     );
   }
@@ -69,10 +69,10 @@ const BirdGallery = () => {
   const getScale = (birdId, gridPosition, hoveredBird) => {
     // Return default scale if no bird is hovered
     if (!hoveredBird) return 1;
-    
+
     // Scale up the hovered bird
     if (hoveredBird.id === birdId) return 1.1;
-    
+
     // Scale down other birds slightly when one is hovered
     return 0.95;
   };
@@ -107,7 +107,7 @@ const BirdGallery = () => {
               console.log('Filtered birds count:', filteredBirds.length);
               console.log('Bird positions:', filteredBirds.map(bird => ({
                 id: bird.id,
-                name: bird.name,
+                name: bird.bird_name,
                 col: bird.gridPosition.col,
                 row: bird.gridPosition.row,
                 x: bird.gridPosition.x,
@@ -115,7 +115,7 @@ const BirdGallery = () => {
               })));
 
               const scale = getScale(bird.id, bird.gridPosition, hoveredBird);
-        
+
               return (
                 <BirdCard
                   key={bird.id}
