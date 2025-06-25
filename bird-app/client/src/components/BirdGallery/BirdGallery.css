@@ -7,9 +7,10 @@
   
   .birds-container {
     position: relative;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: auto;
   }
   
   .bird-card-container {
@@ -63,7 +64,7 @@
     font-size: 1.125rem;
   }
   
-  /* Add these new styles to your existing BirdGallery.css */
+
   .view-toggle {
   position: fixed;
   top: 20px;

@@ -32,12 +32,12 @@ const BirdDetail = ({ bird, onClose }) => {
             <div className="bird-details">
               <div className="detail-item">
                 <h3>Range</h3>
-                <p>{bird.range}</p>
+                <p>{bird.bird_range}</p>
               </div>
 
               <div className="detail-item">
                 <h3>Diet</h3>
-                <p>{bird.diet}</p>
+                <p>{bird.bird_diet}</p>
               </div>
 
               <div className="detail-item">

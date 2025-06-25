@@ -15,9 +15,6 @@ const BirdCard = ({
     { x: position.left, y: position.top } :
     (bird.gridPosition || { x: 0, y: 0 });
 
-
-    console.log('Image URL:', bird.bird_description);
-
   return (
     <div
       className="bird-card-container"
@@ -35,14 +32,14 @@ const BirdCard = ({
       <div className="bird-card">
         <div className="bird-image">
           <img
-            src={bird.img_url} alt={bird.bird_name} />
+            src={bird.img_url} />
         </div>
 
         {isHovered && (
           <div className="bird-tooltip">
             <div className="bird-name">{bird.bird_name}</div>
-            <div className="bird-range">{bird.range}</div>
-            <div className="bird-diet">{bird.diet}</div>
+            <div className="bird-range">Range- {bird.bird_range}</div>
+            <div className="bird-diet">Diet- {bird.bird_diet}</div>
             <div className="tooltip-arrow"></div>
           </div>
         )}
