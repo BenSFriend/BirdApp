@@ -26,7 +26,7 @@ bird_name varchar(50) NOT NULL UNIQUE,
 wingspan INT,
 range_id int not null,
 diet_id int not null,
-img_url varchar(500) null,
+img_url varchar(800) null,
 bird_description varchar(500) null,
 FOREIGN KEY (range_id) REFERENCES ranges(range_id),
 FOREIGN KEY (diet_id) REFERENCES diets(diet_id)
