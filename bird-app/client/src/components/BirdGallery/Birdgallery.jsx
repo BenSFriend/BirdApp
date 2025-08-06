@@ -22,7 +22,7 @@ const BirdGallery = () => {
         height: window.innerHeight
       });
     };
-    
+
     updateSize();
     window.addEventListener('resize', updateSize);
     return () => window.removeEventListener('resize', updateSize);
@@ -36,6 +36,26 @@ const BirdGallery = () => {
     setSearchTerm,
     loadBirds
   } = useBirds(containerSize.width, containerSize.height);
+
+  useEffect(() => {
+    console.log('=== BIRD LOADING DEBUG ===');
+    console.log('Total filtered birds:', filteredBirds.length);
+    console.log('Loading state:', loading);
+    console.log('Search term:', searchTerm);
+    console.log('Container size:', containerSize);
+    
+    // Check if birds have positions
+    const birdsWithPositions = filteredBirds.filter(bird => bird.gridPosition);
+    const birdsWithoutPositions = filteredBirds.filter(bird => !bird.gridPosition);
+    
+    console.log('Birds with positions:', birdsWithPositions.length);
+    console.log('Birds without positions:', birdsWithoutPositions.length);
+    
+    if (birdsWithoutPositions.length > 0) {
+      console.log('Birds missing positions:', birdsWithoutPositions.map(b => b.bird_name));
+    }
+    
+  }, [filteredBirds, loading, searchTerm, containerSize]);
 
   // Use grid hook for grid-related state and functions
   const {
@@ -59,9 +79,9 @@ const BirdGallery = () => {
 
   if (selectedBird) {
     return (
-      <BirdDetail 
-        bird={selectedBird} 
-        onClose={closeBirdDetail} 
+      <BirdDetail
+        bird={selectedBird}
+        onClose={closeBirdDetail}
       />
     );
   }
@@ -69,10 +89,10 @@ const BirdGallery = () => {
   const getScale = (birdId, gridPosition, hoveredBird) => {
     // Return default scale if no bird is hovered
     if (!hoveredBird) return 1;
-    
+
     // Scale up the hovered bird
     if (hoveredBird.id === birdId) return 1.1;
-    
+
     // Scale down other birds slightly when one is hovered
     return 0.95;
   };
@@ -107,7 +127,7 @@ const BirdGallery = () => {
               console.log('Filtered birds count:', filteredBirds.length);
               console.log('Bird positions:', filteredBirds.map(bird => ({
                 id: bird.id,
-                name: bird.name,
+                name: bird.bird_name,
                 col: bird.gridPosition.col,
                 row: bird.gridPosition.row,
                 x: bird.gridPosition.x,
@@ -115,7 +135,7 @@ const BirdGallery = () => {
               })));
 
               const scale = getScale(bird.id, bird.gridPosition, hoveredBird);
-        
+
               return (
                 <BirdCard
                   key={bird.id}

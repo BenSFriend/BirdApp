@@ -1,5 +1,4 @@
 /* Mobile-first approach - base styles for smallest screens */
-/*  ultimately, bird image and name should diaplay, and a popup should appear on hover like michaelas. onclick should bring up a popup*/
 .cardContainer {
     background-color: rgb(212, 212, 212);
     min-width: 40px;
@@ -15,31 +14,22 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     cursor: pointer;
+    /* CRITICAL: Use relative positioning to prevent layout issues */
+    position: relative;
+    /* CRITICAL: Ensure container doesn't affect parent overflow */
+    overflow: visible;
+    /* CRITICAL: Prevent container from collapsing */
+    box-sizing: border-box;
 }
 
 .cardContainer:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    /* SIMPLIFIED: Reduced transform complexity */
     transform: scale(1.05) translateY(-3px);
     z-index: 10;
 }
 
-/* Make other cards shrink when any card is hovered */
-.cardContainer:not(:hover) {
-    transition: all 0.3s ease;
-}
-
-.cardContainer:hover~.cardContainer {
-    transform: scale(0.90) translateY(1px);
-    opacity: 0.8;
-}
-
-@supports selector(:has(*)) {
-    .cardContainer:has(~ .cardContainer:hover) {
-        transform: scale(0.90) translateY(1px);
-        opacity: 0.8;
-    }
-}
-
+/* REMOVED problematic sibling selectors that might interfere with grid layout */
 .birdImage {
     width: 100%;
     height: 100px;
@@ -62,12 +52,12 @@
     text-align: left;
 }
 
-/*  gotta fix this to act right, looking for smaller text and description undearneath*/
 .infoSubContainer{
-display: flex;
-flex-direction: row;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.1rem;
 }
-
 
 .birdName {
     font-size: 0.9rem;
@@ -104,10 +94,6 @@ flex-direction: row;
 .cardContainer:hover .range,
 .cardContainer:hover .diet {
     background-color: rgba(255, 255, 255, 0.6);
-}
-
-.cardContainer+.cardContainer {
-    margin-top: 0.25rem;
 }
 
 /* Tablet styles */
@@ -216,4 +202,80 @@ flex-direction: row;
     .cardContainer:hover {
         transform: scale(1.1) translateY(-8px);
     }
+}
+
+/* CRITICAL FIXES: Container styles that ensure proper scrolling */
+
+/* Root container for the full bird page */
+.fullbirdPage {
+    width: 100%;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+    /* CRITICAL: Allow natural overflow and scrolling */
+    overflow: visible;
+    height: auto;
+}
+
+/* Grid container that holds all the bird cards */
+.fullbirdGrid, .birdGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 24px;
+    width: 100%;
+    /* CRITICAL: Allow natural height expansion */
+    height: auto;
+    min-height: min-content;
+    max-height: none;
+    padding: 20px;
+    box-sizing: border-box;
+    /* CRITICAL: Ensure container can expand */
+    overflow: visible;
+}
+
+/* CRITICAL: Ensure parent containers don't constrain height */
+.fullbirdGrid > *,
+.birdGrid > * {
+    position: relative;
+}
+
+/* Mobile grid adjustments */
+@media (max-width: 480px) {
+    .fullbirdGrid,
+    .birdGrid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 16px;
+        padding: 10px;
+    }
+}
+
+/* Tablet grid adjustments */
+@media (min-width: 480px) and (max-width: 768px) {
+    .fullbirdGrid,
+    .birdGrid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+}
+
+/* Desktop grid adjustments */
+@media (min-width: 768px) {
+    .fullbirdGrid,
+    .birdGrid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 24px;
+    }
+}
+
+/* ADDED: Fix for radial magnification container */
+.bird-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 24px;
+    width: 100%;
+    height: auto;
+    min-height: min-content;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: visible;
 }
